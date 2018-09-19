@@ -1,3 +1,4 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <!-- 字体大小 -->
+    <dimen name="font_size_13">13sp</dimen>
 </resources>
