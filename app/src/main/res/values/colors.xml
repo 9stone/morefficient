@@ -6,11 +6,15 @@
 
     <color name="white0">#FFFFFF</color>
     <color name="white1">#E5E5E5</color>
+    <color name="white2">#EDEDED</color>
+    <color name="white3">#F9F9F9</color>
+    <color name="white4">#EDEDED</color>
 
     <color name="black0">#000000</color>
     <color name="black1">#5C5C5C</color>
     <color name="black2">#252525</color>
     <color name="black3">#555555</color>
+    <color name="black4">#848484</color>
 
     <color name="transparent">#00000000</color>
 </resources>

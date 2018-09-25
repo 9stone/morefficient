@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Morefficient</string>
     <string name="action_settings">Settings</string>
+
+    <!-- 创建任务 -->
+    <string name="create_task_title">好记性不如烂笔头</string>
+    <string name="create_task_create">帮我管这事</string>
+    <string name="create_task_summary_hint">简单记录下吧...</string>
+    <string name="create_task_create_detail_part1">友情提示：重要的事建议</string>
+    <string name="create_task_create_detail_part2"><u>☞怼我☜</u></string>
+    <string name="create_task_summary_content_empty">亲，沉默不是金，时间才是金</string>
+    <string name="create_task_fail">居然失败了，再试试，给我次机会</string>
 </resources>

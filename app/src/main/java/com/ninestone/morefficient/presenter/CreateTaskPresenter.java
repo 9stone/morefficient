@@ -1,31 +1,32 @@
 package com.ninestone.morefficient.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.persistent.DatabaseHelper;
-import com.ninestone.morefficient.view.v.ToDoTaskView;
-
-import java.util.List;
+import com.ninestone.morefficient.view.v.CreateTaskView;
 
 /**
- * 未完成任务Presenter
- * Created by zhenglei on 2018/9/20.
+ * 创建任务Presenter
+ * Created by zhenglei on 2018/9/25.
  */
-public class ToDoTaskPresenter {
-    private static final String TAG = "ToDoTaskPresenter";
+public class CreateTaskPresenter {
+    private static final String TAG = "CreateTaskPresenter";
 
-    private ToDoTaskView mToDoTaskView;
+    private CreateTaskView mCreateTaskView;
 
     private DatabaseHelper mDatabaseHelper = null;
     private RuntimeExceptionDao<TaskModel, Integer> mTaskDao;
 
 
-    public ToDoTaskPresenter(ToDoTaskView toDoTaskView) {
-        this.mToDoTaskView = toDoTaskView;
+    public CreateTaskPresenter(CreateTaskView createTaskView) {
+        this.mCreateTaskView = createTaskView;
     }
 
     /**
@@ -45,48 +46,32 @@ public class ToDoTaskPresenter {
     }
 
     /**
-     * 获取任务列表
+     * 创建任务
+     * @param context
+     * @param summary
+     * @return
      */
-    public void getTask() {
-        if (mTaskDao == null) {
-            return;
+    public TaskModel createTask(Context context, String summary) {
+        if (TextUtils.isEmpty(summary)) {
+            throw new IllegalArgumentException("summary cannot be empty");
         }
-
-        List<TaskModel> taskModels = queryTask();
-
-        if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
-        }
-    }
-
-    /**
-     * 删除任务
-     * @param taskModel
-     */
-    public boolean delete(TaskModel taskModel) {
-        if (taskModel == null) {
-            throw new NullPointerException("taskModel cannot be null");
-        }
-
-        taskModel.setDeleted(TaskModel.DELETED);
 
         if (mTaskDao == null) {
-            return false;
+            return null;
         }
 
-        int updatedRows = mTaskDao.update(taskModel);
-        if (updatedRows <= 0) {
-            Log.w(TAG, "updatedRows <= 0");
-            return false;
+        TaskModel taskModel = new TaskModel(summary, 0, 0, "", "", 0, 0, 0, 0);
+        int updatedRows = mTaskDao.create(taskModel);
+
+        if (updatedRows < 1) {
+            Log.e(TAG, "TaskDao create fail, updatedRows:" + updatedRows);
+            if (context != null) {
+                Toast.makeText(context, R.string.create_task_fail, Toast.LENGTH_LONG).show();
+            }
+            return null;
         }
 
-        List<TaskModel> taskModels = queryTask();
-
-        if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
-        }
-
-        return true;
+        return taskModel;
     }
 
     private DatabaseHelper getHelper(Context context) {
@@ -94,7 +79,7 @@ public class ToDoTaskPresenter {
             throw new NullPointerException("context cannot be null");
         }
 
-        if (mDatabaseHelper == null) {
+        if(mDatabaseHelper == null) {
             mDatabaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         }
         return mDatabaseHelper;
@@ -113,13 +98,5 @@ public class ToDoTaskPresenter {
             OpenHelperManager.releaseHelper();
             mDatabaseHelper = null;
         }
-    }
-
-    private List<TaskModel> queryTask() {
-        if (mTaskDao == null) {
-            return null;
-        }
-
-        return mTaskDao.queryForEq(TaskModel.FIELD_DELETED, TaskModel.NOT_DELETED);
     }
 }

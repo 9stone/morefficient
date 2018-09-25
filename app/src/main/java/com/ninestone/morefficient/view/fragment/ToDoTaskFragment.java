@@ -16,6 +16,7 @@ import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.ToDoTaskPresenter;
 import com.ninestone.morefficient.view.adapter.TaskAdapter;
+import com.ninestone.morefficient.view.fragment.CreateTaskFragment.CreateTaskListener;
 import com.ninestone.morefficient.view.v.ToDoTaskView;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  * 未完成任务
  * Created by zhenglei on 2018/9/14.
  */
-public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnClickListener {
+public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnClickListener, CreateTaskListener {
     private static final String TAG = "ToDoTaskFragment";
 
     @BindView(R.id.rcv_task)
@@ -48,6 +49,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initData();
     }
 
@@ -77,13 +79,6 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
     }
 
     @Override
-    public void fillTask(List<TaskModel> tasks) {
-        if (mTaskAdapter != null) {
-            mTaskAdapter.setData(tasks);
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -93,11 +88,25 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
     }
 
     @Override
+    public void fillTask(List<TaskModel> tasks) {
+        if (mTaskAdapter != null) {
+            mTaskAdapter.setData(tasks);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_add_task:
-
+                addTask();
                 break;
+        }
+    }
+
+    @Override
+    public void onCreateTask(TaskModel task) {
+        if (mToDoTaskPresenter != null) {
+            mToDoTaskPresenter.getTask();
         }
     }
 
@@ -113,5 +122,11 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
         rcvTask.setAdapter(mTaskAdapter);
 
         fabAddTask.setOnClickListener(this);
+    }
+
+    private void addTask() {
+        CreateTaskFragment createTaskFragment = CreateTaskFragment.newInstance();
+        createTaskFragment.setCreateTaskListener(this);
+        createTaskFragment.show(getActivity().getSupportFragmentManager(), "CreateTaskFragment");
     }
 }

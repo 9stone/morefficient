@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white0"
+    android:orientation="vertical"
+    tools:context=".view.fragment.CreateTaskFragment">
+
+    <!-- 顶部标题 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center"
+        android:text="@string/create_task_title"
+        android:textColor="@color/black2"
+        android:textSize="@dimen/font_size_14"
+        android:textStyle="bold"/>
+
+    <View style="@style/CommonLine.Horizontal"/>
+
+    <!-- 中部，包括任务内容输入框、跳转到创建详细任务提示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <!-- 任务内容输入框 -->
+        <EditText
+            android:id="@+id/edt_summary"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_create_task_summary"
+            android:hint="@string/create_task_summary_hint"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black2"
+            android:textColorHint="@color/black4"
+            android:textSize="@dimen/font_size_14"/>
+
+        <!-- 跳转到创建详细任务提示 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_task_create_detail_part1"
+                android:textColor="@color/black4"
+                android:textSize="@dimen/font_size_12"/>
+
+            <TextView
+                android:id="@+id/txt_create_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/create_task_create_detail_part2"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/font_size_12"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View style="@style/CommonLine.Horizontal"/>
+
+    <!-- 底部按钮，确定 -->
+    <TextView
+        android:id="@+id/txt_create"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/selector_create_task_create"
+        android:gravity="center"
+        android:text="@string/create_task_create"
+        android:textColor="@color/white0"
+        android:textSize="@dimen/font_size_16"/>
+
+</LinearLayout>
