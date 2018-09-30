@@ -22,6 +22,11 @@
             </intent-filter>
         </activity>
 
+        <!-- 创建详细任务 -->
+        <activity
+            android:name=".view.activity.CreateDetailTaskActivity"
+            android:windowSoftInputMode="stateVisible"/>
+
     </application>
 
 </manifest>

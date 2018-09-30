@@ -10,4 +10,14 @@
     <string name="create_task_create_detail_part2"><u>☞怼我☜</u></string>
     <string name="create_task_summary_content_empty">亲，沉默不是金，时间才是金</string>
     <string name="create_task_fail">居然失败了，再试试，给我次机会</string>
+
+    <!-- 创建详细任务 -->
+    <string name="create_detail_task_title">因为重要，所以认真</string>
+    <string name="create_detail_task_action_save">记好了</string>
+    <string name="create_detail_task_hint_title">何事</string>
+    <string name="create_detail_task_label_start_time">何时</string>
+    <string name="create_detail_task_label_location">何地</string>
+    <string name="create_detail_task_label_level">有多重要</string>
+    <string name="create_detail_task_title_empty">何事，请说明白</string>
+    <string name="create_detail_task_start_time_empty">何时，请说明白</string>
 </resources>

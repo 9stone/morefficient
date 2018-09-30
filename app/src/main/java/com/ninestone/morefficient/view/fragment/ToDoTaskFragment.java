@@ -1,6 +1,7 @@
 package com.ninestone.morefficient.view.fragment;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,12 +24,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 未完成任务
  * Created by zhenglei on 2018/9/14.
  */
-public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnClickListener, CreateTaskListener {
+public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     private static final String TAG = "ToDoTaskFragment";
 
     @BindView(R.id.rcv_task)
@@ -94,20 +96,9 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab_add_task:
-                addTask();
-                break;
-        }
-    }
-
-    @Override
-    public void onCreateTask(TaskModel task) {
-        if (mToDoTaskPresenter != null) {
-            mToDoTaskPresenter.getTask();
-        }
+    @OnClick(R.id.fab_add_task)
+    void addTask() {
+        addTaskOp();
     }
 
     private void initData() {
@@ -120,13 +111,31 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView, View.OnC
         mTaskAdapter = new TaskAdapter(getContext());
         mTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
         rcvTask.setAdapter(mTaskAdapter);
-
-        fabAddTask.setOnClickListener(this);
     }
 
-    private void addTask() {
+    private void addTaskOp() {
         CreateTaskFragment createTaskFragment = CreateTaskFragment.newInstance();
-        createTaskFragment.setCreateTaskListener(this);
+        createTaskFragment.setCreateTaskListener(mCreateTaskListener);
         createTaskFragment.show(getActivity().getSupportFragmentManager(), "CreateTaskFragment");
     }
+
+    private CreateTaskListener mCreateTaskListener = new CreateTaskListener() {
+
+        @Override
+        public void onCreateTask(TaskModel task) {
+            if (mToDoTaskPresenter != null) {
+                mToDoTaskPresenter.getTask();
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+
+        }
+    };
 }

@@ -15,6 +15,7 @@
     <color name="black2">#252525</color>
     <color name="black3">#555555</color>
     <color name="black4">#848484</color>
+    <color name="black5">#333333</color>
 
     <color name="transparent">#00000000</color>
 </resources>

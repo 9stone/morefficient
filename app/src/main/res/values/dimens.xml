@@ -3,6 +3,9 @@
     <!-- 半圆效果，TextView的高度要是半径的2倍 -->
     <dimen name="to_do_task_txt_radius">20dp</dimen>
 
+    <!-- 创建详细任务 -->
+    <dimen name="create_detail_task_item_height">50dp</dimen>
+
     <!-- 字体大小 -->
     <dimen name="font_size_12">12sp</dimen>
     <dimen name="font_size_13">13sp</dimen>

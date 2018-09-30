@@ -1,6 +1,7 @@
 package com.ninestone.morefficient.view.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.CreateTaskPresenter;
+import com.ninestone.morefficient.view.activity.CreateDetailTaskActivity;
 import com.ninestone.morefficient.view.v.CreateTaskView;
 
 import butterknife.BindView;
@@ -85,28 +87,6 @@ public class CreateTaskFragment extends DialogFragment implements CreateTaskView
         return R.style.DialogFragmentTheme;
     }
 
-    private void initData() {
-        mCreateTaskPresenter = new CreateTaskPresenter(this);
-        mCreateTaskPresenter.create(getContext());
-    }
-
-    /**
-     * 设置对话框的LayoutParams，使其在底部
-     */
-    private void setDialogLayoutParams() {
-        Window window = getDialog().getWindow();
-        WindowManager.LayoutParams oldLp = window.getAttributes();
-
-        WindowManager.LayoutParams newLp = new WindowManager.LayoutParams();
-        newLp.copyFrom(oldLp);
-
-        newLp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        newLp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        newLp.gravity = Gravity.BOTTOM;
-
-        window.setAttributes(newLp);
-    }
-
     @OnClick(R.id.txt_create)
     void createTask() {
         Log.i(TAG, "createTask");
@@ -134,10 +114,33 @@ public class CreateTaskFragment extends DialogFragment implements CreateTaskView
         Log.i(TAG, "createDetailTask");
 
         mSummary = edtSummary.getText().toString().trim();
-//        CreateTaskDetailActivity.start(getContext(), mSummary, mCreateTaskListener);
+        CreateDetailTaskActivity.start(getContext(), mSummary, mCreateTaskListener);
 
         dismiss();
     }
+
+    private void initData() {
+        mCreateTaskPresenter = new CreateTaskPresenter(this);
+        mCreateTaskPresenter.create(getContext());
+    }
+
+    /**
+     * 设置对话框的LayoutParams，使其在底部
+     */
+    private void setDialogLayoutParams() {
+        Window window = getDialog().getWindow();
+        WindowManager.LayoutParams oldLp = window.getAttributes();
+
+        WindowManager.LayoutParams newLp = new WindowManager.LayoutParams();
+        newLp.copyFrom(oldLp);
+
+        newLp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        newLp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        newLp.gravity = Gravity.BOTTOM;
+
+        window.setAttributes(newLp);
+    }
+
 
     /**
      * 检查输入有效性
@@ -156,7 +159,7 @@ public class CreateTaskFragment extends DialogFragment implements CreateTaskView
     /**
      * 创建任务监听器
      */
-    public interface CreateTaskListener {
+    public interface CreateTaskListener extends Parcelable {
         void onCreateTask(TaskModel task);
     }
 }
