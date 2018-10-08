@@ -10,12 +10,11 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "task")
 public class TaskModel {
     // 字段名常量
-    public static final String FIELD_DELETED = "deleted";
+    public static final String FIELD_STATUS = "status";
 
-    // 是否已删除
-    public static final int DELETED = 1;
-    public static final int NOT_DELETED = 0;
-
+    // 状态
+    public static final int STATUS_TO_DO = 1;
+    public static final int STATUS_DONE = 2;
 
     @DatabaseField(generatedId = true)
     private long _id;
@@ -39,7 +38,7 @@ public class TaskModel {
     private int deleted;
 
     // 视图状态值，不需要持久化
-    private boolean mIsShowDelete;
+    private boolean mIsShowRemove;
 
 
     public TaskModel() {
@@ -138,12 +137,12 @@ public class TaskModel {
         this.deleted = deleted;
     }
 
-    public void setShowDelete(boolean isShowDelete) {
-        this.mIsShowDelete = isShowDelete;
+    public boolean isShowRemove() {
+        return mIsShowRemove;
     }
 
-    public boolean isShowDelete() {
-        return mIsShowDelete;
+    public void setShowRemove(boolean isShowRemove) {
+        this.mIsShowRemove = isShowRemove;
     }
 
     @Override
@@ -179,8 +178,8 @@ public class TaskModel {
                 .append("deleted=")
                 .append(deleted)
                 .append(", ")
-                .append("mIsShowDelete=")
-                .append(mIsShowDelete);
+                .append("mIsShowRemove=")
+                .append(mIsShowRemove);
         return sb.toString();
     }
 }

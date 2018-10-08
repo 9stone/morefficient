@@ -1,4 +1,4 @@
-package com.ninestone.morefficient.view;
+package com.ninestone.morefficient.util;
 
 import java.util.List;
 

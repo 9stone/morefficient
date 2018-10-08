@@ -1,31 +1,30 @@
 package com.ninestone.morefficient.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.persistent.DatabaseHelper;
-import com.ninestone.morefficient.view.v.ToDoTaskView;
+import com.ninestone.morefficient.view.v.DoneTaskView;
 
 import java.util.List;
 
 /**
- * 未完成任务Presenter
- * Created by zhenglei on 2018/9/20.
+ * 已完成任务Presenter
+ * Created by zhenglei on 2018/10/4.
  */
-public class ToDoTaskPresenter {
-    private static final String TAG = "ToDoTaskPresenter";
+public class DoneTaskPresenter {
+    private static final String TAG = "DoneTaskPresenter";
 
-    private ToDoTaskView mToDoTaskView;
+    private DoneTaskView mDoneTaskView;
 
     private DatabaseHelper mDatabaseHelper = null;
     private RuntimeExceptionDao<TaskModel, Integer> mTaskDao;
 
 
-    public ToDoTaskPresenter(ToDoTaskView toDoTaskView) {
-        this.mToDoTaskView = toDoTaskView;
+    public DoneTaskPresenter(DoneTaskView doneTaskView) {
+        this.mDoneTaskView = doneTaskView;
     }
 
     /**
@@ -54,39 +53,9 @@ public class ToDoTaskPresenter {
 
         List<TaskModel> taskModels = queryTask();
 
-        if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
+        if (mDoneTaskView != null) {
+            mDoneTaskView.fillTask(taskModels);
         }
-    }
-
-    /**
-     * 移除任务
-     * @param taskModel
-     */
-    public boolean remove(TaskModel taskModel) {
-        if (taskModel == null) {
-            throw new NullPointerException("taskModel cannot be null");
-        }
-
-        taskModel.setStatus(TaskModel.STATUS_DONE);
-
-        if (mTaskDao == null) {
-            return false;
-        }
-
-        int updatedRows = mTaskDao.update(taskModel);
-        if (updatedRows <= 0) {
-            Log.w(TAG, "updatedRows <= 0");
-            return false;
-        }
-
-        List<TaskModel> taskModels = queryTask();
-
-        if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
-        }
-
-        return true;
     }
 
     private DatabaseHelper getHelper(Context context) {
@@ -120,6 +89,6 @@ public class ToDoTaskPresenter {
             return null;
         }
 
-        return mTaskDao.queryForEq(TaskModel.FIELD_STATUS, TaskModel.STATUS_TO_DO);
+        return mTaskDao.queryForEq(TaskModel.FIELD_STATUS, TaskModel.STATUS_DONE);
     }
 }

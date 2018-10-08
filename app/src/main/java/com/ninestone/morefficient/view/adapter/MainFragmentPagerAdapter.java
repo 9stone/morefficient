@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ninestone.morefficient.R;
-import com.ninestone.morefficient.view.CommonUtil;
+import com.ninestone.morefficient.util.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;

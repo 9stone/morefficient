@@ -11,22 +11,21 @@ import android.widget.TextView;
 import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.ToDoTaskPresenter;
-import com.ninestone.morefficient.view.CommonUtil;
+import com.ninestone.morefficient.util.CommonUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 任务列表的适配器
+ * 未完成任务列表的适配器
  * Created by zhenglei on 2018/9/20.
  */
-public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private List<TaskModel> mTasks;
     private ToDoTaskPresenter mToDoTaskPresenter;
 
 
-    public TaskAdapter(Context context) {
+    public ToDoTaskAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -39,29 +38,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public boolean add(TaskModel task) {
-        if (task == null) {
-            return false;
-        }
-
-        if (mTasks == null) {
-            mTasks = new ArrayList<>();
-        }
-
-        boolean isAdded = mTasks.add(task);
-
-        notifyItemInserted(getItemCount());
-
-        return isAdded;
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_to_do_task, parent, false);
 
-        TaskAdapter.ViewHolder holder = new TaskAdapter.ViewHolder(view);
+        ToDoTaskAdapter.ViewHolder holder = new ToDoTaskAdapter.ViewHolder(view);
         holder.txtTask = (TextView) view.findViewById(R.id.txt_task);
-        holder.txtDelete = (TextView) view.findViewById(R.id.txt_delete);
+        holder.txtRemove = (TextView) view.findViewById(R.id.txt_remove);
 
         return holder;
     }
@@ -77,27 +60,27 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return;
         }
 
-        final TaskAdapter.ViewHolder viewHolder = (TaskAdapter.ViewHolder) holder;
+        final ToDoTaskAdapter.ViewHolder viewHolder = (ToDoTaskAdapter.ViewHolder) holder;
 
         viewHolder.txtTask.setText(taskModel.getTitle());
         viewHolder.txtTask.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                hideAllDelete();
-                taskModel.setShowDelete(true);
+                hideAllRemove();
+                taskModel.setShowRemove(true);
                 notifyItemChanged(position);
                 return true;
             }
         });
 
-        viewHolder.txtDelete.setVisibility(taskModel.isShowDelete()
+        viewHolder.txtRemove.setVisibility(taskModel.isShowRemove()
                                                     ? View.VISIBLE
                                                     : View.GONE);
-        viewHolder.txtDelete.setOnClickListener(new OnClickListener() {
+        viewHolder.txtRemove.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mToDoTaskPresenter != null) {
-                    mToDoTaskPresenter.delete(taskModel);
+                    mToDoTaskPresenter.remove(taskModel);
                 }
             }
         });
@@ -114,7 +97,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtTask;
-        TextView txtDelete;
+        TextView txtRemove;
 
 
         public ViewHolder(View view) {
@@ -123,16 +106,16 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     /**
-     * 隐藏所有删除按钮
+     * 隐藏所有移除按钮
      */
-    private void hideAllDelete() {
+    private void hideAllRemove() {
         if (CommonUtil.isEmptyList(mTasks)) {
             return;
         }
 
         for (TaskModel taskModel : mTasks) {
-            if (taskModel != null && taskModel.isShowDelete()) {
-                taskModel.setShowDelete(false);
+            if (taskModel != null && taskModel.isShowRemove()) {
+                taskModel.setShowRemove(false);
             }
         }
     }

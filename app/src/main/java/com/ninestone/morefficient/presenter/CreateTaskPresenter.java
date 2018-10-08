@@ -60,7 +60,7 @@ public class CreateTaskPresenter {
             return null;
         }
 
-        TaskModel taskModel = new TaskModel(summary, 0, 0, "", "", 0, 0, 0, 0);
+        TaskModel taskModel = new TaskModel(summary, 0, 0, "", "", 0, 0, TaskModel.STATUS_TO_DO, 0);
         int updatedRows = mTaskDao.create(taskModel);
 
         if (updatedRows < 1) {

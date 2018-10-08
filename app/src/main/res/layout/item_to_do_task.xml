@@ -26,11 +26,11 @@
             android:textSize="@dimen/font_size_14"/>
 
         <TextView
-            android:id="@+id/txt_delete"
+            android:id="@+id/txt_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
-            android:drawableLeft="@drawable/to_do_task_delete_task"
+            android:drawableLeft="@drawable/to_do_task_remove_task"
             android:padding="3dp"
             android:visibility="gone"/>
 

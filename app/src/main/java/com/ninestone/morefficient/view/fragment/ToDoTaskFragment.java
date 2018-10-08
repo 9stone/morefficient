@@ -16,7 +16,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.ToDoTaskPresenter;
-import com.ninestone.morefficient.view.adapter.TaskAdapter;
+import com.ninestone.morefficient.view.adapter.ToDoTaskAdapter;
 import com.ninestone.morefficient.view.fragment.CreateTaskFragment.CreateTaskListener;
 import com.ninestone.morefficient.view.v.ToDoTaskView;
 
@@ -38,7 +38,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     @BindView(R.id.fab_add_task)
     FloatingActionButton fabAddTask;
 
-    private TaskAdapter mTaskAdapter;
+    private ToDoTaskAdapter mToDoTaskAdapter;
 
     private ToDoTaskPresenter mToDoTaskPresenter;
 
@@ -71,9 +71,20 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
         Log.i(TAG, "onResume");
         super.onResume();
 
-        if(getUserVisibleHint()) {
+        if (getUserVisibleHint()) {
             Log.i(TAG, "getUserVisibleHint");
 
+            if (mToDoTaskPresenter != null) {
+                mToDoTaskPresenter.getTask();
+            }
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
             if (mToDoTaskPresenter != null) {
                 mToDoTaskPresenter.getTask();
             }
@@ -91,8 +102,8 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
 
     @Override
     public void fillTask(List<TaskModel> tasks) {
-        if (mTaskAdapter != null) {
-            mTaskAdapter.setData(tasks);
+        if (mToDoTaskAdapter != null) {
+            mToDoTaskAdapter.setData(tasks);
         }
     }
 
@@ -108,9 +119,9 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
 
     private void initView() {
         rcvTask.setLayoutManager(new FlexboxLayoutManager(getContext()));
-        mTaskAdapter = new TaskAdapter(getContext());
-        mTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
-        rcvTask.setAdapter(mTaskAdapter);
+        mToDoTaskAdapter = new ToDoTaskAdapter(getContext());
+        mToDoTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
+        rcvTask.setAdapter(mToDoTaskAdapter);
     }
 
     private void addTaskOp() {
