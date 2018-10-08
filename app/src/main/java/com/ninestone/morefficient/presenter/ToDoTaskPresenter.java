@@ -56,6 +56,11 @@ public class ToDoTaskPresenter {
 
         if (mToDoTaskView != null) {
             mToDoTaskView.fillTask(taskModels);
+
+            int count = taskModels == null
+                                    ? 0
+                                    : taskModels.size();
+            mToDoTaskView.fillCount(count);
         }
     }
 

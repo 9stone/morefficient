@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.ninestone.morefficient.R;
@@ -35,6 +36,8 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
 
     @BindView(R.id.rcv_task)
     RecyclerView rcvTask;
+    @BindView(R.id.txt_count)
+    TextView txtCount;
     @BindView(R.id.fab_add_task)
     FloatingActionButton fabAddTask;
 
@@ -105,6 +108,15 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
         if (mToDoTaskAdapter != null) {
             mToDoTaskAdapter.setData(tasks);
         }
+    }
+
+    @Override
+    public void fillCount(int count) {
+        txtCount.setVisibility(count == 0
+                                    ? View.GONE
+                                    : View.VISIBLE);
+        String formattedCount = String.format(getString(R.string.to_do_task_count), count);
+        txtCount.setText(formattedCount);
     }
 
     @OnClick(R.id.fab_add_task)

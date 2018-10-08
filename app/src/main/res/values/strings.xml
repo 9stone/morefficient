@@ -2,6 +2,12 @@
     <string name="app_name">Morefficient</string>
     <string name="action_settings">Settings</string>
 
+    <!-- 未完成任务 -->
+    <string name="to_do_task_count">未完成任务：%1$d</string>
+
+    <!-- 已完成任务 -->
+    <string name="done_task_count">已完成任务：%1$d</string>
+
     <!-- 创建任务 -->
     <string name="create_task_title">好记性不如烂笔头</string>
     <string name="create_task_create">帮我管这事</string>

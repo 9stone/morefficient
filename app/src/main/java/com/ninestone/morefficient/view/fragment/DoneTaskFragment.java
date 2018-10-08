@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.ninestone.morefficient.R;
@@ -30,6 +31,8 @@ public class DoneTaskFragment extends Fragment implements DoneTaskView {
 
     @BindView(R.id.rcv_task)
     RecyclerView rcvTask;
+    @BindView(R.id.txt_count)
+    TextView txtCount;
 
     private DoneTaskAdapter mDoneTaskAdapter;
 
@@ -95,6 +98,15 @@ public class DoneTaskFragment extends Fragment implements DoneTaskView {
         if (mDoneTaskAdapter != null) {
             mDoneTaskAdapter.setData(tasks);
         }
+    }
+
+    @Override
+    public void fillCount(int count) {
+        txtCount.setVisibility(count == 0
+                                    ? View.GONE
+                                    : View.VISIBLE);
+        String formattedCount = String.format(getString(R.string.done_task_count), count);
+        txtCount.setText(formattedCount);
     }
 
     private void initData() {

@@ -18,4 +18,8 @@
     <color name="black5">#333333</color>
 
     <color name="transparent">#00000000</color>
+
+    <color name="yellow1">#FEFCDC</color>
+
+    <color name="orange5">#E58E39</color>
 </resources>

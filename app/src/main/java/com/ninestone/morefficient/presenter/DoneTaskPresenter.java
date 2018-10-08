@@ -55,6 +55,11 @@ public class DoneTaskPresenter {
 
         if (mDoneTaskView != null) {
             mDoneTaskView.fillTask(taskModels);
+
+            int count = taskModels == null
+                                    ? 0
+                                    : taskModels.size();
+            mDoneTaskView.fillCount(count);
         }
     }
 
