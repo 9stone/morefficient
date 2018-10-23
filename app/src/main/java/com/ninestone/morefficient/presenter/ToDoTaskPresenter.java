@@ -55,12 +55,7 @@ public class ToDoTaskPresenter {
         List<TaskModel> taskModels = queryTask();
 
         if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
-
-            int count = taskModels == null
-                                    ? 0
-                                    : taskModels.size();
-            mToDoTaskView.fillCount(count);
+            mToDoTaskView.fill(taskModels);
         }
     }
 
@@ -89,7 +84,7 @@ public class ToDoTaskPresenter {
         List<TaskModel> taskModels = queryTask();
 
         if (mToDoTaskView != null) {
-            mToDoTaskView.fillTask(taskModels);
+            mToDoTaskView.fill(taskModels);
         }
 
         return true;

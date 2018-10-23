@@ -104,19 +104,9 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     }
 
     @Override
-    public void fillTask(List<TaskModel> tasks) {
-        if (mToDoTaskAdapter != null) {
-            mToDoTaskAdapter.setData(tasks);
-        }
-    }
-
-    @Override
-    public void fillCount(int count) {
-        txtCount.setVisibility(count == 0
-                                    ? View.GONE
-                                    : View.VISIBLE);
-        String formattedCount = String.format(getString(R.string.to_do_task_count), count);
-        txtCount.setText(formattedCount);
+    public void fill(List<TaskModel> tasks) {
+        fillTask(tasks);
+        fillCount();
     }
 
     @OnClick(R.id.fab_add_task)
@@ -134,6 +124,28 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
         mToDoTaskAdapter = new ToDoTaskAdapter(getContext());
         mToDoTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
         rcvTask.setAdapter(mToDoTaskAdapter);
+    }
+
+    private void fillTask(List<TaskModel> tasks) {
+        if (mToDoTaskAdapter == null) {
+            return;
+        }
+
+        mToDoTaskAdapter.setData(tasks);
+    }
+
+    private void fillCount() {
+        if (mToDoTaskAdapter == null) {
+            return;
+        }
+
+        int count = mToDoTaskAdapter.getItemCount();
+
+        txtCount.setVisibility(count == 0
+                ? View.GONE
+                : View.VISIBLE);
+        String formattedCount = String.format(getString(R.string.to_do_task_count), count);
+        txtCount.setText(formattedCount);
     }
 
     private void addTaskOp() {

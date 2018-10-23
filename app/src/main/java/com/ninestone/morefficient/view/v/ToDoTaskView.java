@@ -10,13 +10,8 @@ import java.util.List;
  */
 public interface ToDoTaskView {
     /**
-     * 填充任务
+     * 填充
+     * @param tasks
      */
-    void fillTask(List<TaskModel> tasks);
-
-    /**
-     * 填充任务数量
-     * @param count
-     */
-    void fillCount(int count);
+    void fill(List<TaskModel> tasks);
 }
