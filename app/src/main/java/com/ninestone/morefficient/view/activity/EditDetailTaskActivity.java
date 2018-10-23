@@ -20,16 +20,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ninestone.morefficient.R;
-import com.ninestone.morefficient.listener.CreateTaskListener;
+import com.ninestone.morefficient.listener.EditTaskListener;
 import com.ninestone.morefficient.model.TaskModel;
-import com.ninestone.morefficient.presenter.CreateDetailTaskPresenter;
+import com.ninestone.morefficient.presenter.EditDetailTaskPresenter;
 import com.ninestone.morefficient.view.fragment.DatePickerFragment;
 import com.ninestone.morefficient.view.fragment.DatePickerFragment.DateSetListener;
 import com.ninestone.morefficient.view.fragment.TimePickerFragment;
 import com.ninestone.morefficient.view.fragment.TimePickerFragment.TimeSetListener;
-import com.ninestone.morefficient.view.v.CreateDetailTaskView;
+import com.ninestone.morefficient.view.v.EditDetailTaskView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -37,13 +36,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 创建详细任务
- * Created by zhenglei on 2018/9/29.
+ * 编辑详细任务
+ * Created by zhenglei on 2018/10/21.
  */
-public class CreateDetailTaskActivity extends AppCompatActivity implements CreateDetailTaskView, TextWatcher, DateSetListener, TimeSetListener {
-    private static final String TAG = "CreateTaskDetail";
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_CREATE_TASK_LISTENER = "create_task_listener";
+public class EditDetailTaskActivity  extends AppCompatActivity implements EditDetailTaskView, TextWatcher, DateSetListener, TimeSetListener {
+    private static final String TAG = "EditDetailTask";
+    private static final String KEY_ID = "id";
+    private static final String KEY_EDIT_TASK_LISTENER = "edit_task_listener";
 
     @BindView(R.id.tlb_top)
     Toolbar tlbTop;
@@ -58,17 +57,19 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
     @BindView(R.id.rtb_level)
     RatingBar rtbLevel;
 
-    private CreateDetailTaskPresenter mCreateDetailTaskPresenter;
+    private EditDetailTaskPresenter mEditDetailTaskPresenter;
 
+    private long mId;
+    private EditTaskListener mEditTaskListener;
     private String mTitle;
-    private CreateTaskListener mCreateTaskListener;
     private Calendar mStartTime;
+    private int mLevel;
 
 
-    public static void start(Context context, String title, CreateTaskListener createTaskListener) {
-        Intent intent = new Intent(context, CreateDetailTaskActivity.class);
-        intent.putExtra(KEY_TITLE, title);
-        intent.putExtra(KEY_CREATE_TASK_LISTENER, createTaskListener);
+    public static void start(Context context, long id, EditTaskListener editTaskListener) {
+        Intent intent = new Intent(context, EditDetailTaskActivity.class);
+        intent.putExtra(KEY_ID, id);
+        intent.putExtra(KEY_EDIT_TASK_LISTENER, editTaskListener);
         context.startActivity(intent);
     }
 
@@ -77,7 +78,7 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
         super.onCreate(savedInstanceState);
         getIntentData();
 
-        setContentView(R.layout.activity_create_detail_task);
+        setContentView(R.layout.activity_edit_detail_task);
         ButterKnife.bind(this);
 
         initData();
@@ -88,8 +89,8 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
     public void onDestroy() {
         super.onDestroy();
 
-        if (mCreateDetailTaskPresenter != null) {
-            mCreateDetailTaskPresenter.destroy();
+        if (mEditDetailTaskPresenter != null) {
+            mEditDetailTaskPresenter.destroy();
         }
     }
 
@@ -101,15 +102,23 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        updateDetailTask();
+        return super.onOptionsItemSelected(item);
+    }
 
-        switch (id) {
-            case R.id.action_save:
-                createDetailTask();
-                break;
+    @Override
+    public void initTask(TaskModel taskModel) {
+        if (taskModel == null) {
+            return;
         }
 
-        return super.onOptionsItemSelected(item);
+        mTitle = taskModel.getTitle();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(taskModel.getStart_time());
+        mStartTime = calendar;
+
+        mLevel = taskModel.getLevel();
     }
 
     @Override
@@ -140,10 +149,9 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
     public void onTimeSet(Calendar calendar) {
         mStartTime = calendar;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd HH时mm分");
-        if (mStartTime != null) {
-            String formatDate = sdf.format(mStartTime.getTime());
-            txtStartTime.setText(formatDate);
+        if (mEditDetailTaskPresenter != null) {
+            String formattedStartTime = mEditDetailTaskPresenter.formatTime(mStartTime);
+            txtStartTime.setText(formattedStartTime);
         }
     }
 
@@ -155,8 +163,6 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
 
     @OnClick(R.id.llt_start_time)
     void clickStartTime() {
-        mStartTime = Calendar.getInstance();
-
         DatePickerFragment dpFragment = DatePickerFragment.newInstance(mStartTime);
         dpFragment.setDateSetListener(this);
         dpFragment.show(getFragmentManager(), "datePicker");
@@ -165,14 +171,15 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
     private void getIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
-            mTitle = intent.getStringExtra(KEY_TITLE);
-            mCreateTaskListener = intent.getParcelableExtra(KEY_CREATE_TASK_LISTENER);
+            mId = intent.getLongExtra(KEY_ID, TaskModel.ID_NOT_EXIST);
+            mEditTaskListener = intent.getParcelableExtra(KEY_EDIT_TASK_LISTENER);
         }
     }
 
     private void initData() {
-        mCreateDetailTaskPresenter = new CreateDetailTaskPresenter(this);
-        mCreateDetailTaskPresenter.create(this);
+        mEditDetailTaskPresenter = new EditDetailTaskPresenter(this);
+        mEditDetailTaskPresenter.create(this);
+        mEditDetailTaskPresenter.query(mId);
     }
 
     private void initView() {
@@ -184,21 +191,27 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
         edtTitle.setSelection(TextUtils.isEmpty(mTitle)
                                         ? 0
                                         : mTitle.length());
-
+        edtTitle.addTextChangedListener(this);
         txtClearText.setVisibility(TextUtils.isEmpty(mTitle)
                                         ? View.GONE
                                         : View.VISIBLE);
-        edtTitle.addTextChangedListener(this);
+
+        if (mEditDetailTaskPresenter != null) {
+            String formattedStartTime = mEditDetailTaskPresenter.formatTime(mStartTime);
+            txtStartTime.setText(formattedStartTime);
+        }
+
+        rtbLevel.setRating(mLevel);
     }
 
-    private void createDetailTask() {
-        Log.i(TAG, "createDetailTask");
+    private void updateDetailTask() {
+        Log.i(TAG, "updateDetailTask");
 
         if (!checkInput()) {
             return;
         }
 
-        if (mCreateDetailTaskPresenter == null) {
+        if (mEditDetailTaskPresenter == null) {
             return;
         }
 
@@ -207,12 +220,11 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
                                     : System.currentTimeMillis();
 
         int level = (int) rtbLevel.getRating();
+        TaskModel detailTaskModel = mEditDetailTaskPresenter.updateDetailTask(this, mId, mTitle, startTime, level);
 
-        TaskModel detailTaskModel = mCreateDetailTaskPresenter.createDetailTask(this, mTitle, startTime, level);
-
-        // 创建详细任务成功
-        if (mCreateTaskListener != null) {
-            mCreateTaskListener.onCreateTask(detailTaskModel);
+        // 编辑详细任务成功
+        if (mEditTaskListener != null) {
+            mEditTaskListener.onEditTask(detailTaskModel);
         }
 
         finish();

@@ -21,7 +21,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "morefficient.db";
     private static final int DATABASE_VERSION = 1;
 
-    private RuntimeExceptionDao<TaskModel, Integer> mRuntimeExceptionTaskDao = null;
+    private RuntimeExceptionDao<TaskModel, Long> mRuntimeExceptionTaskDao = null;
 
 
     public DatabaseHelper(Context context) {
@@ -50,7 +50,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         mRuntimeExceptionTaskDao = null;
     }
 
-    public RuntimeExceptionDao<TaskModel, Integer> getTaskDao() {
+    public RuntimeExceptionDao<TaskModel, Long> getTaskDao() {
         if(mRuntimeExceptionTaskDao == null) {
             mRuntimeExceptionTaskDao = getRuntimeExceptionDao(TaskModel.class);
         }

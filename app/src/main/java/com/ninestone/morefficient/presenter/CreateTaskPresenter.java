@@ -12,6 +12,8 @@ import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.persistent.DatabaseHelper;
 import com.ninestone.morefficient.view.v.CreateTaskView;
 
+import java.util.Calendar;
+
 /**
  * 创建任务Presenter
  * Created by zhenglei on 2018/9/25.
@@ -22,7 +24,7 @@ public class CreateTaskPresenter {
     private CreateTaskView mCreateTaskView;
 
     private DatabaseHelper mDatabaseHelper = null;
-    private RuntimeExceptionDao<TaskModel, Integer> mTaskDao;
+    private RuntimeExceptionDao<TaskModel, Long> mTaskDao;
 
 
     public CreateTaskPresenter(CreateTaskView createTaskView) {
@@ -60,7 +62,9 @@ public class CreateTaskPresenter {
             return null;
         }
 
-        TaskModel taskModel = new TaskModel(summary, 0, 0, "", "", 0, 0, TaskModel.STATUS_TO_DO, 0);
+        long startTime = Calendar.getInstance().getTimeInMillis();
+
+        TaskModel taskModel = new TaskModel(summary, startTime, 0, "", "", 0, 0, TaskModel.STATUS_TO_DO, 0);
         int updatedRows = mTaskDao.create(taskModel);
 
         if (updatedRows < 1) {
@@ -85,7 +89,7 @@ public class CreateTaskPresenter {
         return mDatabaseHelper;
     }
 
-    private RuntimeExceptionDao<TaskModel, Integer> getTaskDao(DatabaseHelper databaseHelper) {
+    private RuntimeExceptionDao<TaskModel, Long> getTaskDao(DatabaseHelper databaseHelper) {
         if(databaseHelper == null) {
             return null;
         }

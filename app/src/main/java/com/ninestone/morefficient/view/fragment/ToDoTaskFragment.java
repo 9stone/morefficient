@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.ninestone.morefficient.R;
+import com.ninestone.morefficient.listener.CreateTaskListener;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.ToDoTaskPresenter;
 import com.ninestone.morefficient.view.adapter.ToDoTaskAdapter;
-import com.ninestone.morefficient.view.fragment.CreateTaskFragment.CreateTaskListener;
 import com.ninestone.morefficient.view.v.ToDoTaskView;
 
 import java.util.List;

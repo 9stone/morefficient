@@ -9,23 +9,26 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.ninestone.morefficient.R;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.persistent.DatabaseHelper;
-import com.ninestone.morefficient.view.v.CreateDetailTaskView;
+import com.ninestone.morefficient.view.v.EditDetailTaskView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
- * 创建详细任务Presenter
- * Created by zhenglei on 2018/9/29.
+ * 编辑详细任务Presenter
+ * Created by zhenglei on 2018/10/21.
  */
-public class CreateDetailTaskPresenter {
-    private static final String TAG = "CreateDetailTaskPresenter";
+public class EditDetailTaskPresenter {
+    private static final String TAG = "EditDetailTaskPresenter";
 
-    private CreateDetailTaskView mCreateDetailTaskView;
+    private EditDetailTaskView mEditDetailTaskView;
 
     private DatabaseHelper mDatabaseHelper = null;
     private RuntimeExceptionDao<TaskModel, Long> mTaskDao;
 
 
-    public CreateDetailTaskPresenter(CreateDetailTaskView createDetailTaskView) {
-        this.mCreateDetailTaskView = createDetailTaskView;
+    public EditDetailTaskPresenter(EditDetailTaskView editDetailTaskView) {
+        this.mEditDetailTaskView = editDetailTaskView;
     }
 
     /**
@@ -45,28 +48,62 @@ public class CreateDetailTaskPresenter {
     }
 
     /**
-     * 创建详细任务
+     * 更新信息任务
      * @param context
+     * @param id
      * @param title
      * @param startTime
      * @param level
      * @return
      */
-    public TaskModel createDetailTask(Context context, String title, long startTime, int level) {
+    public TaskModel updateDetailTask(Context context, long id, String title, long startTime, int level) {
         if (mTaskDao == null) {
             return null;
         }
 
-        TaskModel taskModel = new TaskModel(title, startTime, 0, "", "", 0, level, TaskModel.STATUS_TO_DO, 0);
-        int updatedRows = mTaskDao.create(taskModel);
+        TaskModel taskModel = new TaskModel(id, title, startTime, 0, "", "", 0, level, TaskModel.STATUS_TO_DO, 0);
+        int updatedRows = mTaskDao.update(taskModel);
 
         if (updatedRows < 1) {
-            Log.e(TAG, "TaskDao create fail, updatedRows:" + updatedRows);
-            Toast.makeText(context, R.string.create_task_fail, Toast.LENGTH_LONG).show();
+            Log.e(TAG, "TaskDao update fail, updatedRows:" + updatedRows);
+            Toast.makeText(context, R.string.update_detail_task_fail, Toast.LENGTH_LONG).show();
             return null;
         }
 
         return taskModel;
+    }
+
+    /**
+     * 查询并填充任务
+     * @param id
+     */
+    public void query(long id) {
+        if (mTaskDao == null) {
+            return;
+        }
+
+        TaskModel taskModel = mTaskDao.queryForId(id);
+        if (taskModel == null) {
+            return;
+        }
+
+        if (mEditDetailTaskView != null) {
+            mEditDetailTaskView.initTask(taskModel);
+        }
+    }
+
+    /**
+     * 格式化时间
+     * @param time
+     * @return
+     */
+    public static String formatTime(Calendar time) {
+        if (time == null) {
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd HH时mm分");
+        return sdf.format(time.getTime());
     }
 
     private DatabaseHelper getHelper(Context context) {

@@ -1,7 +1,6 @@
 package com.ninestone.morefficient.view.fragment;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ninestone.morefficient.R;
+import com.ninestone.morefficient.listener.CreateTaskListener;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.CreateTaskPresenter;
 import com.ninestone.morefficient.view.activity.CreateDetailTaskActivity;
@@ -154,12 +154,5 @@ public class CreateTaskFragment extends DialogFragment implements CreateTaskView
         }
 
         return true;
-    }
-
-    /**
-     * 创建任务监听器
-     */
-    public interface CreateTaskListener extends Parcelable {
-        void onCreateTask(TaskModel task);
     }
 }

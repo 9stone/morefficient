@@ -1,6 +1,7 @@
 package com.ninestone.morefficient.view.adapter;
 
 import android.content.Context;
+import android.os.Parcel;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ninestone.morefficient.R;
+import com.ninestone.morefficient.listener.EditTaskListener;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.presenter.ToDoTaskPresenter;
 import com.ninestone.morefficient.util.CommonUtil;
+import com.ninestone.morefficient.view.activity.EditDetailTaskActivity;
 
 import java.util.List;
 
@@ -63,6 +66,13 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final ToDoTaskAdapter.ViewHolder viewHolder = (ToDoTaskAdapter.ViewHolder) holder;
 
         viewHolder.txtTask.setText(taskModel.getTitle());
+        viewHolder.txtTask.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id = taskModel.getId();
+                EditDetailTaskActivity.start(mContext, id, mEditTaskListener);
+            }
+        });
         viewHolder.txtTask.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -119,4 +129,23 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
     }
+
+    private EditTaskListener mEditTaskListener = new EditTaskListener() {
+        @Override
+        public void onEditTask(TaskModel taskModel) {
+            if (mToDoTaskPresenter != null) {
+                mToDoTaskPresenter.getTask();
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+
+        }
+    };
 }

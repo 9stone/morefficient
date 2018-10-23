@@ -21,7 +21,7 @@ public class ToDoTaskPresenter {
     private ToDoTaskView mToDoTaskView;
 
     private DatabaseHelper mDatabaseHelper = null;
-    private RuntimeExceptionDao<TaskModel, Integer> mTaskDao;
+    private RuntimeExceptionDao<TaskModel, Long> mTaskDao;
 
 
     public ToDoTaskPresenter(ToDoTaskView toDoTaskView) {
@@ -67,6 +67,7 @@ public class ToDoTaskPresenter {
     /**
      * 移除任务
      * @param taskModel
+     * @return
      */
     public boolean remove(TaskModel taskModel) {
         if (taskModel == null) {
@@ -105,7 +106,7 @@ public class ToDoTaskPresenter {
         return mDatabaseHelper;
     }
 
-    private RuntimeExceptionDao<TaskModel, Integer> getTaskDao(DatabaseHelper databaseHelper) {
+    private RuntimeExceptionDao<TaskModel, Long> getTaskDao(DatabaseHelper databaseHelper) {
         if(databaseHelper == null) {
             return null;
         }

@@ -12,6 +12,9 @@ public class TaskModel {
     // 字段名常量
     public static final String FIELD_STATUS = "status";
 
+    // 不存在的id
+    public static final long ID_NOT_EXIST = -1L;
+
     // 状态
     public static final int STATUS_TO_DO = 1;
     public static final int STATUS_DONE = 2;
@@ -39,6 +42,7 @@ public class TaskModel {
 
     // 视图状态值，不需要持久化
     private boolean mIsShowRemove;
+    private boolean mIsShowRevert;
 
 
     public TaskModel() {
@@ -46,6 +50,11 @@ public class TaskModel {
     }
 
     public TaskModel(String title, long start_time, long end_time, String location, String description, int rule, int level, int status, int deleted) {
+        this(ID_NOT_EXIST, title, start_time, end_time, location, description, rule, level, status, deleted);
+    }
+
+    public TaskModel(long id, String title, long start_time, long end_time, String location, String description, int rule, int level, int status, int deleted) {
+        this._id = id;
         this.title = title;
         this.start_time = start_time;
         this.end_time = end_time;
@@ -145,6 +154,14 @@ public class TaskModel {
         this.mIsShowRemove = isShowRemove;
     }
 
+    public boolean isShowRevert() {
+        return mIsShowRevert;
+    }
+
+    public void setShowRevert(boolean isShowRevert) {
+        this.mIsShowRevert = isShowRevert;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -179,7 +196,10 @@ public class TaskModel {
                 .append(deleted)
                 .append(", ")
                 .append("mIsShowRemove=")
-                .append(mIsShowRemove);
+                .append(mIsShowRemove)
+                .append(", ")
+                .append("mIsShowRevert=")
+                .append(mIsShowRevert);
         return sb.toString();
     }
 }
