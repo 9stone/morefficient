@@ -65,7 +65,7 @@ public class DoneTaskPresenter {
     }
 
     /**
-     * 恢复删除的任务，将在未完成任务列表中重新显示
+     * 恢复任务，将在未完成任务列表中重新显示
      * @param taskModel
      * @return
      */
