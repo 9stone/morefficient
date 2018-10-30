@@ -1,12 +1,18 @@
 package com.ninestone.morefficient.view.adapter;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.os.Parcel;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import com.ninestone.morefficient.R;
@@ -26,6 +32,7 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mContext;
     private List<TaskModel> mTasks;
     private ToDoTaskPresenter mToDoTaskPresenter;
+    private ViewGroup mRootView;
 
 
     public ToDoTaskAdapter(Context context) {
@@ -34,6 +41,10 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setToDoTaskPresenter(ToDoTaskPresenter toDoTaskPresenter) {
         this.mToDoTaskPresenter = toDoTaskPresenter;
+    }
+
+    public void setRootView(ViewGroup rootView) {
+        this.mRootView = rootView;
     }
 
     public void setData(List<TaskModel> tasks) {
@@ -91,6 +102,7 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View v) {
                 if (mToDoTaskPresenter != null) {
                     mToDoTaskPresenter.remove(taskModel);
+                    playRemoveAnim(viewHolder.txtTask);
                 }
             }
         });
@@ -128,6 +140,80 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 taskModel.setShowRemove(false);
             }
         }
+    }
+
+    /**
+     * 播放移除动画
+     * @param txtTask
+     */
+    private void playRemoveAnim(TextView txtTask) {
+        if (mRootView == null || txtTask == null) {
+            return;
+        }
+
+        final TextView copyTxtTask = (TextView) LayoutInflater.from(mContext).inflate(R.layout.component_to_do_task_text, null);
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        copyTxtTask.setText(txtTask.getText());
+
+        mRootView.addView(copyTxtTask, layoutParams);
+
+        int[] parentLoc = new int[2];
+        mRootView.getLocationInWindow(parentLoc);
+
+        int[] startLoc = new int[2];
+        txtTask.getLocationInWindow(startLoc);
+
+        int quarterScreenWidth = CommonUtil.getScreenWidth(mContext) / 4 * 3;
+        int[] endLoc = new int[]{quarterScreenWidth - txtTask.getWidth() / 2, parentLoc[1]};
+
+        float startX = startLoc[0] - parentLoc[0];
+        float startY = startLoc[1] - parentLoc[1];
+
+        float toX = endLoc[0] - parentLoc[0];
+        float toY = endLoc[1] - parentLoc[1];
+
+        Path path = new Path();
+        path.moveTo(startX, startY);
+        path.quadTo((startX + toX) / 2, startY, toX, toY);
+        final PathMeasure pathMeasure = new PathMeasure(path, false);
+
+        final float[] mCurrentPosition = new float[2];
+
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, pathMeasure.getLength());
+        valueAnimator.setDuration(800);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                pathMeasure.getPosTan(animatedValue, mCurrentPosition, null);
+
+                copyTxtTask.setTranslationX(mCurrentPosition[0]);
+                copyTxtTask.setTranslationY(mCurrentPosition[1]);
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mRootView.removeView(copyTxtTask);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        valueAnimator.start();
     }
 
     private EditTaskListener mEditTaskListener = new EditTaskListener() {

@@ -34,6 +34,7 @@ import butterknife.OnClick;
 public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     private static final String TAG = "ToDoTaskFragment";
 
+    private ViewGroup mRootView;
     @BindView(R.id.rcv_task)
     RecyclerView rcvTask;
     @BindView(R.id.txt_count)
@@ -61,12 +62,12 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_to_do_task, container, false);
-        ButterKnife.bind(this, view);
+        mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_to_do_task, container, false);
+        ButterKnife.bind(this, mRootView);
 
         initView();
 
-        return view;
+        return mRootView;
     }
 
     @Override
@@ -123,6 +124,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
         rcvTask.setLayoutManager(new FlexboxLayoutManager(getContext()));
         mToDoTaskAdapter = new ToDoTaskAdapter(getContext());
         mToDoTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
+        mToDoTaskAdapter.setRootView(mRootView);
         rcvTask.setAdapter(mToDoTaskAdapter);
     }
 
