@@ -13,9 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,8 +54,8 @@ public class EditDetailTaskActivity  extends AppCompatActivity implements EditDe
     LinearLayout lltStartTime;
     @BindView(R.id.txt_start_time)
     TextView txtStartTime;
-    @BindView(R.id.rtb_level)
-    RatingBar rtbLevel;
+    @BindView(R.id.cbx_urgent)
+    CheckBox cbxUrgent;
 
     private EditDetailTaskPresenter mEditDetailTaskPresenter;
 
@@ -63,7 +63,7 @@ public class EditDetailTaskActivity  extends AppCompatActivity implements EditDe
     private EditTaskListener mEditTaskListener;
     private String mTitle;
     private Calendar mStartTime;
-    private int mLevel;
+    private int mUrgent;
 
 
     public static void start(Context context, long id, EditTaskListener editTaskListener) {
@@ -118,7 +118,7 @@ public class EditDetailTaskActivity  extends AppCompatActivity implements EditDe
         calendar.setTimeInMillis(taskModel.getStart_time());
         mStartTime = calendar;
 
-        mLevel = taskModel.getLevel();
+        mUrgent = taskModel.getUrgent();
     }
 
     @Override
@@ -201,7 +201,7 @@ public class EditDetailTaskActivity  extends AppCompatActivity implements EditDe
             txtStartTime.setText(formattedStartTime);
         }
 
-        rtbLevel.setRating(mLevel);
+        cbxUrgent.setChecked(mUrgent == TaskModel.URGENT);
     }
 
     private void updateDetailTask() {
@@ -219,8 +219,11 @@ public class EditDetailTaskActivity  extends AppCompatActivity implements EditDe
                                     ? mStartTime.getTimeInMillis()
                                     : System.currentTimeMillis();
 
-        int level = (int) rtbLevel.getRating();
-        TaskModel detailTaskModel = mEditDetailTaskPresenter.updateDetailTask(this, mId, mTitle, startTime, level);
+        int urgent = cbxUrgent.isChecked()
+                                ? TaskModel.URGENT
+                                : TaskModel.NO_URGENT;
+
+        TaskModel detailTaskModel = mEditDetailTaskPresenter.updateDetailTask(this, mId, mTitle, startTime, urgent);
 
         // 编辑详细任务成功
         if (mEditTaskListener != null) {

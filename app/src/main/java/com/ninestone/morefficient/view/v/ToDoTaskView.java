@@ -10,8 +10,20 @@ import java.util.List;
  */
 public interface ToDoTaskView {
     /**
-     * 填充
-     * @param tasks
+     * 填充紧急任务
+     * @param urgentTasks
      */
-    void fill(List<TaskModel> tasks);
+    void fillUrgentTask(List<TaskModel> urgentTasks);
+
+    /**
+     * 填充不紧急任务
+     * @param noUrgentTasks
+     */
+    void fillNoUrgentTask(List<TaskModel> noUrgentTasks);
+
+    /**
+     * 填充任务数量
+     * @param count
+     */
+    void fillCount(long count);
 }

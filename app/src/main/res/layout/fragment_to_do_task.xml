@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- 任务总数 -->
         <TextView
             android:id="@+id/txt_count"
             android:layout_width="match_parent"
@@ -22,14 +23,77 @@
             android:textColor="@color/orange5"
             android:visibility="gone"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcv_task"
+        <!-- 紧急任务标题 -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1px"
+                android:background="@color/white5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/to_do_task_urgent"
+                android:textColor="@color/black8"
+                android:textSize="@dimen/font_size_15"/>
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1px"
+                android:background="@color/white5"/>
+
+        </LinearLayout>
+
+        <!-- 紧急任务项 -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_task_urgent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- 不紧急任务标题 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1px"
+                android:background="@color/white5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/to_do_task_not_urgent"
+                android:textColor="@color/black8"
+                android:textSize="@dimen/font_size_15"/>
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1px"
+                android:background="@color/white5"/>
+
+        </LinearLayout>
+
+        <!-- 不紧急任务项 -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_task_no_urgent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
+    <!-- 创建任务 -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_task"
         android:layout_width="wrap_content"

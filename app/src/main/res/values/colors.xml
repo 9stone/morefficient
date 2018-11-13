@@ -9,6 +9,7 @@
     <color name="white2">#EDEDED</color>
     <color name="white3">#F9F9F9</color>
     <color name="white4">#EDEDED</color>
+    <color name="white5">#CCCCCC</color>
 
     <color name="black0">#000000</color>
     <color name="black1">#5C5C5C</color>
@@ -18,6 +19,7 @@
     <color name="black5">#333333</color>
     <color name="black6">#C7C7C7</color>
     <color name="black7">#D2D2D2</color>
+    <color name="black8">#666666</color>
 
     <color name="transparent">#00000000</color>
 

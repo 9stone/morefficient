@@ -11,9 +11,14 @@ import com.j256.ormlite.table.DatabaseTable;
 public class TaskModel {
     // 字段名常量
     public static final String FIELD_STATUS = "status";
+    public static final String FIELD_URGENT = "urgent";
 
     // 不存在的id
     public static final long ID_NOT_EXIST = -1L;
+
+    // 是否紧急
+    public static final int URGENT = 1;
+    public static final int NO_URGENT = 0;
 
     // 状态
     public static final int STATUS_TO_DO = 1;
@@ -34,6 +39,8 @@ public class TaskModel {
     @DatabaseField
     private int rule;
     @DatabaseField
+    private int urgent;
+    @DatabaseField
     private int level;
     @DatabaseField
     private int status;
@@ -49,11 +56,11 @@ public class TaskModel {
         // needed by ormlite
     }
 
-    public TaskModel(String title, long start_time, long end_time, String location, String description, int rule, int level, int status, int deleted) {
-        this(ID_NOT_EXIST, title, start_time, end_time, location, description, rule, level, status, deleted);
+    public TaskModel(String title, long start_time, long end_time, String location, String description, int rule, int urgent, int level, int status, int deleted) {
+        this(ID_NOT_EXIST, title, start_time, end_time, location, description, rule, urgent, level, status, deleted);
     }
 
-    public TaskModel(long id, String title, long start_time, long end_time, String location, String description, int rule, int level, int status, int deleted) {
+    public TaskModel(long id, String title, long start_time, long end_time, String location, String description, int rule, int urgent, int level, int status, int deleted) {
         this._id = id;
         this.title = title;
         this.start_time = start_time;
@@ -61,6 +68,7 @@ public class TaskModel {
         this.location = location;
         this.description = description;
         this.rule = rule;
+        this.urgent = urgent;
         this.level = level;
         this.status = status;
         this.deleted = deleted;
@@ -120,6 +128,14 @@ public class TaskModel {
 
     public void setRule(int rule) {
         this.rule = rule;
+    }
+
+    public int getUrgent() {
+        return urgent;
+    }
+
+    public void setUrgent(int urgent) {
+        this.urgent = urgent;
     }
 
     public int getLevel() {
@@ -185,6 +201,9 @@ public class TaskModel {
                 .append(", ")
                 .append("rule=")
                 .append(rule)
+                .append(", ")
+                .append("urgent=")
+                .append(urgent)
                 .append(", ")
                 .append("level=")
                 .append(level)

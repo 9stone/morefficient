@@ -220,7 +220,7 @@ public class ToDoTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onEditTask(TaskModel taskModel) {
             if (mToDoTaskPresenter != null) {
-                mToDoTaskPresenter.getTask();
+                mToDoTaskPresenter.getAllTask();
             }
         }
 

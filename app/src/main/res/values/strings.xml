@@ -4,6 +4,8 @@
 
     <!-- 未完成任务 -->
     <string name="to_do_task_count">未完成任务：%1$d</string>
+    <string name="to_do_task_urgent">紧急</string>
+    <string name="to_do_task_not_urgent">不紧急</string>
 
     <!-- 已完成任务 -->
     <string name="done_task_count">已完成任务：%1$d</string>
@@ -22,11 +24,13 @@
     <string name="create_detail_task_action_save">记好了</string>
     <string name="create_detail_task_hint_title">何事</string>
     <string name="create_detail_task_label_start_time">何时</string>
-    <string name="create_detail_task_label_location">何地</string>
+    <string name="create_detail_task_label_urgent">紧急否</string>
     <string name="create_detail_task_label_level">有多重要</string>
+    <string name="create_detail_task_label_location">何地</string>
     <string name="create_detail_task_title_empty">何事，请说明白</string>
     <string name="create_detail_task_start_time_empty">何时，请说明白</string>
 
     <!-- 编辑详细任务 -->
     <string name="update_detail_task_fail">居然失败了，再试试，给我次机会</string>
+
 </resources>

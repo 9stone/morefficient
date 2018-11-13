@@ -53,15 +53,15 @@ public class EditDetailTaskPresenter {
      * @param id
      * @param title
      * @param startTime
-     * @param level
+     * @param urgent
      * @return
      */
-    public TaskModel updateDetailTask(Context context, long id, String title, long startTime, int level) {
+    public TaskModel updateDetailTask(Context context, long id, String title, long startTime, int urgent) {
         if (mTaskDao == null) {
             return null;
         }
 
-        TaskModel taskModel = new TaskModel(id, title, startTime, 0, "", "", 0, level, TaskModel.STATUS_TO_DO, 0);
+        TaskModel taskModel = new TaskModel(id, title, startTime, 0, "", "", 0, urgent, 0, TaskModel.STATUS_TO_DO, 0);
         int updatedRows = mTaskDao.update(taskModel);
 
         if (updatedRows < 1) {

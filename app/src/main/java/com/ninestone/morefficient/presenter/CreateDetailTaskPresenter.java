@@ -49,15 +49,15 @@ public class CreateDetailTaskPresenter {
      * @param context
      * @param title
      * @param startTime
-     * @param level
+     * @param urgent
      * @return
      */
-    public TaskModel createDetailTask(Context context, String title, long startTime, int level) {
+    public TaskModel createDetailTask(Context context, String title, long startTime, int urgent) {
         if (mTaskDao == null) {
             return null;
         }
 
-        TaskModel taskModel = new TaskModel(title, startTime, 0, "", "", 0, level, TaskModel.STATUS_TO_DO, 0);
+        TaskModel taskModel = new TaskModel(title, startTime, 0, "", "", 0, urgent, 0, TaskModel.STATUS_TO_DO, 0);
         int updatedRows = mTaskDao.create(taskModel);
 
         if (updatedRows < 1) {

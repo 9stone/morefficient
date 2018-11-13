@@ -13,9 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +55,8 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
     LinearLayout lltStartTime;
     @BindView(R.id.txt_start_time)
     TextView txtStartTime;
-    @BindView(R.id.rtb_level)
-    RatingBar rtbLevel;
+    @BindView(R.id.cbx_urgent)
+    CheckBox cbxUrgent;
 
     private CreateDetailTaskPresenter mCreateDetailTaskPresenter;
 
@@ -206,9 +206,11 @@ public class CreateDetailTaskActivity extends AppCompatActivity implements Creat
                                     ? mStartTime.getTimeInMillis()
                                     : System.currentTimeMillis();
 
-        int level = (int) rtbLevel.getRating();
+        int urgent = cbxUrgent.isChecked()
+                                ? TaskModel.URGENT
+                                : TaskModel.NO_URGENT;
 
-        TaskModel detailTaskModel = mCreateDetailTaskPresenter.createDetailTask(this, mTitle, startTime, level);
+        TaskModel detailTaskModel = mCreateDetailTaskPresenter.createDetailTask(this, mTitle, startTime, urgent);
 
         // 创建详细任务成功
         if (mCreateTaskListener != null) {

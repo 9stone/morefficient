@@ -35,14 +35,17 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     private static final String TAG = "ToDoTaskFragment";
 
     private ViewGroup mRootView;
-    @BindView(R.id.rcv_task)
-    RecyclerView rcvTask;
+    @BindView(R.id.rcv_task_urgent)
+    RecyclerView rcvTaskUrgent;
+    @BindView(R.id.rcv_task_no_urgent)
+    RecyclerView rcvTaskNoUrgent;
     @BindView(R.id.txt_count)
     TextView txtCount;
     @BindView(R.id.fab_add_task)
     FloatingActionButton fabAddTask;
 
-    private ToDoTaskAdapter mToDoTaskAdapter;
+    private ToDoTaskAdapter mUrgentTaskAdapter;
+    private ToDoTaskAdapter mNoUrgentTaskAdapter;
 
     private ToDoTaskPresenter mToDoTaskPresenter;
 
@@ -79,7 +82,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
             Log.i(TAG, "getUserVisibleHint");
 
             if (mToDoTaskPresenter != null) {
-                mToDoTaskPresenter.getTask();
+                mToDoTaskPresenter.getAllTask();
             }
         }
     }
@@ -90,7 +93,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
 
         if (isVisibleToUser) {
             if (mToDoTaskPresenter != null) {
-                mToDoTaskPresenter.getTask();
+                mToDoTaskPresenter.getAllTask();
             }
         }
     }
@@ -105,9 +108,30 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     }
 
     @Override
-    public void fill(List<TaskModel> tasks) {
-        fillTask(tasks);
-        fillCount();
+    public void fillUrgentTask(List<TaskModel> urgentTasks) {
+        if (mUrgentTaskAdapter == null) {
+            return;
+        }
+
+        mUrgentTaskAdapter.setData(urgentTasks);
+    }
+
+    @Override
+    public void fillNoUrgentTask(List<TaskModel> noUrgentTasks) {
+        if (mNoUrgentTaskAdapter == null) {
+            return;
+        }
+
+        mNoUrgentTaskAdapter.setData(noUrgentTasks);
+    }
+
+    @Override
+    public void fillCount(long count) {
+        txtCount.setVisibility(count == 0
+                                    ? View.GONE
+                                    : View.VISIBLE);
+        String formattedCount = String.format(getString(R.string.to_do_task_count), count);
+        txtCount.setText(formattedCount);
     }
 
     @OnClick(R.id.fab_add_task)
@@ -121,33 +145,17 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
     }
 
     private void initView() {
-        rcvTask.setLayoutManager(new FlexboxLayoutManager(getContext()));
-        mToDoTaskAdapter = new ToDoTaskAdapter(getContext());
-        mToDoTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
-        mToDoTaskAdapter.setRootView(mRootView);
-        rcvTask.setAdapter(mToDoTaskAdapter);
-    }
+        rcvTaskUrgent.setLayoutManager(new FlexboxLayoutManager(getContext()));
+        mUrgentTaskAdapter = new ToDoTaskAdapter(getContext());
+        mUrgentTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
+        mUrgentTaskAdapter.setRootView(mRootView);
+        rcvTaskUrgent.setAdapter(mUrgentTaskAdapter);
 
-    private void fillTask(List<TaskModel> tasks) {
-        if (mToDoTaskAdapter == null) {
-            return;
-        }
-
-        mToDoTaskAdapter.setData(tasks);
-    }
-
-    private void fillCount() {
-        if (mToDoTaskAdapter == null) {
-            return;
-        }
-
-        int count = mToDoTaskAdapter.getItemCount();
-
-        txtCount.setVisibility(count == 0
-                ? View.GONE
-                : View.VISIBLE);
-        String formattedCount = String.format(getString(R.string.to_do_task_count), count);
-        txtCount.setText(formattedCount);
+        rcvTaskNoUrgent.setLayoutManager(new FlexboxLayoutManager(getContext()));
+        mNoUrgentTaskAdapter = new ToDoTaskAdapter(getContext());
+        mNoUrgentTaskAdapter.setToDoTaskPresenter(mToDoTaskPresenter);
+        mNoUrgentTaskAdapter.setRootView(mRootView);
+        rcvTaskNoUrgent.setAdapter(mNoUrgentTaskAdapter);
     }
 
     private void addTaskOp() {
@@ -161,7 +169,7 @@ public class ToDoTaskFragment extends Fragment implements ToDoTaskView {
         @Override
         public void onCreateTask(TaskModel task) {
             if (mToDoTaskPresenter != null) {
-                mToDoTaskPresenter.getTask();
+                mToDoTaskPresenter.getAllTask();
             }
         }
 

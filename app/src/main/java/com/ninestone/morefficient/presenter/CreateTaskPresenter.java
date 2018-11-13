@@ -64,7 +64,7 @@ public class CreateTaskPresenter {
 
         long startTime = Calendar.getInstance().getTimeInMillis();
 
-        TaskModel taskModel = new TaskModel(summary, startTime, 0, "", "", 0, 0, TaskModel.STATUS_TO_DO, 0);
+        TaskModel taskModel = new TaskModel(summary, startTime, 0, "", "", 0, TaskModel.URGENT, 0, TaskModel.STATUS_TO_DO, 0);
         int updatedRows = mTaskDao.create(taskModel);
 
         if (updatedRows < 1) {
