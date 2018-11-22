@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.ninestone.morefficient.model.TaskModel;
 import com.ninestone.morefficient.persistent.DatabaseHelper;
 import com.ninestone.morefficient.view.v.DoneTaskView;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -45,23 +48,11 @@ public class DoneTaskPresenter {
     }
 
     /**
-     * 获取任务列表
+     * 获取所有任务列表
      */
-    public void getTask() {
-        if (mTaskDao == null) {
-            return;
-        }
-
-        List<TaskModel> taskModels = queryTask();
-
-        if (mDoneTaskView != null) {
-            mDoneTaskView.fillTask(taskModels);
-
-            int count = taskModels == null
-                                    ? 0
-                                    : taskModels.size();
-            mDoneTaskView.fillCount(count);
-        }
+    public void getAllTask() {
+        getTask();
+        getTaskCount();
     }
 
     /**
@@ -86,11 +77,7 @@ public class DoneTaskPresenter {
             return false;
         }
 
-        List<TaskModel> taskModels = queryTask();
-
-        if (mDoneTaskView != null) {
-            mDoneTaskView.fillTask(taskModels);
-        }
+        getAllTask();
 
         return true;
     }
@@ -121,11 +108,64 @@ public class DoneTaskPresenter {
         }
     }
 
+    /**
+     * 获取任务
+     */
+    private void getTask() {
+        if (mTaskDao == null) {
+            return;
+        }
+
+        List<TaskModel> taskModels = queryTask();
+
+        if (mDoneTaskView != null) {
+            mDoneTaskView.fillTask(taskModels);
+        }
+    }
+
+    private void getTaskCount() {
+        if (mTaskDao == null) {
+            return;
+        }
+
+        long count = queryCount();
+
+        if (mDoneTaskView != null) {
+            mDoneTaskView.fillCount(count);
+        }
+    }
+
     private List<TaskModel> queryTask() {
         if (mTaskDao == null) {
             return null;
         }
 
         return mTaskDao.queryForEq(TaskModel.FIELD_STATUS, TaskModel.STATUS_DONE);
+    }
+
+    private long queryCount() {
+        if (mTaskDao == null) {
+            return 0L;
+        }
+
+        QueryBuilder<TaskModel, Long> queryBuilder = mTaskDao.queryBuilder();
+        if (queryBuilder == null) {
+            return 0L;
+        }
+
+        Where<TaskModel, Long> where = queryBuilder.where();
+        if (where == null) {
+            return 0L;
+        }
+
+        try {
+            return where
+                    .eq(TaskModel.FIELD_STATUS, TaskModel.STATUS_DONE)
+                    .countOf();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0L;
     }
 }

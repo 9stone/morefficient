@@ -18,5 +18,5 @@ public interface DoneTaskView {
      * 填充任务数量
      * @param count
      */
-    void fillCount(int count);
+    void fillCount(long count);
 }

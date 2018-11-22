@@ -68,7 +68,7 @@ public class DoneTaskFragment extends Fragment implements DoneTaskView {
 
         if (getUserVisibleHint()) {
             if (mDoneTaskPresenter != null) {
-                mDoneTaskPresenter.getTask();
+                mDoneTaskPresenter.getAllTask();
             }
         }
     }
@@ -79,7 +79,7 @@ public class DoneTaskFragment extends Fragment implements DoneTaskView {
 
         if (isVisibleToUser) {
             if (mDoneTaskPresenter != null) {
-                mDoneTaskPresenter.getTask();
+                mDoneTaskPresenter.getAllTask();
             }
         }
     }
@@ -101,7 +101,7 @@ public class DoneTaskFragment extends Fragment implements DoneTaskView {
     }
 
     @Override
-    public void fillCount(int count) {
+    public void fillCount(long count) {
         txtCount.setVisibility(count == 0
                                     ? View.GONE
                                     : View.VISIBLE);
